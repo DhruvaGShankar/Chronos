@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chronos Engine v2.0 - Schema-Driven Simulation Compiler</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo-badge">CHRONOS v2.0</div>
+      <div class="brand-title">Organizational Simulation Engine</div>
+    </div>
+    <div class="status-pills">
+      <div class="pill"><div class="pill-dot"></div> Pure Declarative IR Engine</div>
+      <div class="pill">Bit-Exact PRNG Tree Active</div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+
+    <!-- Phase 1 & 2: Schema Selection & Introspection -->
+    <div class="grid-layout">
+
+      <div class="card">
+        <div class="card-title"><span>01.</span> Enterprise Schema Introspector</div>
+        
+        <label for="domainPreset">Select Enterprise Domain Preset:</label>
+        <select id="domainPreset" onchange="loadPresetSchema()">
+          <option value="university">Higher Education & Timetable Domain</option>
+          <option value="banking">Enterprise Banking & Credit Risk Domain</option>
+          <option value="retail">Retail Supply Chain & Loyalty Domain</option>
+          <option value="custom">Custom SQL DDL Schema</option>
+        </select>
+
+        <label for="sqlEditor">Raw ANSI SQL DDL Input Schema:</label>
+        <textarea id="sqlEditor" placeholder="CREATE TABLE ..."></textarea>
+
+        <div style="display: flex; gap: 12px;">
+          <button class="btn" onclick="runIntrospection()">
+            Introspect Schema & Build DAG
+          </button>
+          <button class="btn btn-secondary" onclick="compileToIR()">
+            Compile to Chronos IR
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>02.</span> Introspection & Topological Creation DAG</div>
+        
+        <div id="introspectOutput">
+          <p style="color: var(--text-muted); font-size: 13px;">Click <b>Introspect Schema</b> to parse database constraints and discover organizational topology.</p>
+        </div>
+
+        <div style="margin-top: 20px;">
+          <div class="card-title" style="font-size: 14px;">Compiled Chronos IR Plan Preview</div>
+          <pre id="irPreview">Chronos IR Bytecode Plan will be displayed here upon compilation...</pre>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Phase 3: Simulation Execution Controls -->
+    <div class="card full-width" style="margin-top: 24px;">
+      <div class="card-title"><span>03.</span> Deterministic Simulation Execution Controls</div>
+      
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; align-items: end;">
+        <div>
+          <label for="simTicks">Timeline Ticks (Days):</label>
+          <input type="number" id="simTicks" value="90" min="1" max="365">
+        </div>
+        <div>
+          <label for="simSeed">Master PRNG Seed Tree Root:</label>
+          <input type="number" id="simSeed" value="1337">
+        </div>
+        <div>
+          <label for="entityScale">Actor Entity Scale (Count):</label>
+          <input type="number" id="entityScale" value="8" min="1" max="100">
+        </div>
+        <div>
+          <button class="btn" style="width: 100%; height: 42px; justify-content: center; margin-bottom: 16px;" onclick="runSimulation()">
+            Run Deterministic Simulation
+          </button>
+        </div>
+      </div>
+
+      <!-- Metrics Row -->
+      <div class="metrics-row" id="metricsRow" style="display: none;">
+        <div class="metric-card">
+          <label>SIMULATION DAYS</label>
+          <div class="metric-val" id="metricDays">0</div>
+        </div>
+        <div class="metric-card">
+          <label>CAUSAL EVENTS EMITTED</label>
+          <div class="metric-val" id="metricEvents">0</div>
+        </div>
+        <div class="metric-card">
+          <label>ENGINE THROUGHPUT</label>
+          <div class="metric-val" id="metricSpeed">0 Evt/s</div>
+        </div>
+        <div class="metric-card">
+          <label>EXECUTION LATENCY</label>
+          <div class="metric-val" id="metricTime">0 ms</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 4: Materialized Database Explorer -->
+    <div class="card full-width" style="margin-top: 24px;">
+      <div class="card-title" style="justify-content: space-between;">
+        <div><span>04.</span> Materialized Database State Explorer</div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" onclick="exportSQL()">Download SQL Dump (.sql)</button>
+        </div>
+      </div>
+
+      <div class="table-container" id="tableExplorer">
+        <p style="color: var(--text-muted); padding: 24px; text-align: center;">Run simulation to view materialized coherent database records.</p>
+      </div>
+    </div>
+
+    <!-- Phase 5: Causal Event Stream Stream Log -->
+    <div class="card full-width" style="margin-top: 24px;">
+      <div class="card-title"><span>05.</span> Chronological Causal Event Stream (Sample Audit Log)</div>
+      <div class="table-container" id="eventLogExplorer">
+        <p style="color: var(--text-muted); padding: 24px; text-align: center;">Event stream records will appear here after simulation execution.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
